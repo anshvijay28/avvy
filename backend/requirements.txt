@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+supabase
+python-jose[cryptography]
+httpx
+pendulum
+google-auth
+google-auth-httplib2
+google-api-python-client
+python-dotenv
