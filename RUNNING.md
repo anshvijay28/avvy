@@ -95,6 +95,8 @@ npm run dev
 
 Vite + `@crxjs/vite-plugin` watches and rebuilds the extension into `extension/dist/`.
 
+**Keep this terminal running.** In dev mode the service worker loads scripts from `http://localhost:5173`; if Vite stops, the extension breaks.
+
 ### 4. Load in Chrome
 
 1. Open `chrome://extensions`
@@ -156,6 +158,7 @@ cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000
 | Issue | Fix |
 |-------|-----|
 | Extension won't load | Ensure `npm run dev` or `npm run build` ran; load `extension/dist/`, not `extension/` |
+| Service worker failed (status 3) / CORS on `localhost:5173` | Use `npm run dev` with Vite running; manifest must include `http://localhost:5173/*` in `host_permissions`. Or use `npm run build` and load `dist/` without the dev server (no HMR). |
 | Side panel doesn't open | Click the extension toolbar icon; check service worker errors on `chrome://extensions` |
 | CORS errors from extension | Add `chrome-extension://<id>` to `ALLOWED_ORIGINS` in backend |
 | `501 Not implemented` on API routes | Expected — stubs only; implement in focused chunks |

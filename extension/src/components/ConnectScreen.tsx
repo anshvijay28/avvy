@@ -1,15 +1,27 @@
+import { GoogleSignInButton } from "./GoogleSignInButton";
+import "./ConnectScreen.css";
+
 export function ConnectScreen() {
-  const handleConnect = () => {
-    // TODO: launchWebAuthFlow → signInWithIdToken → store session
+  const handleSignUp = () => {
+    // UI-only stub; OAuth wiring comes later
   };
 
   return (
-    <div>
-      <h1>Avvy</h1>
-      <p>Connect your Google Calendar to generate availability tables.</p>
-      <button type="button" onClick={handleConnect}>
-        Connect Google Calendar
-      </button>
+    <div className="connect-screen">
+      <div className="connect-screen__logo">Avvy</div>
+      <h1 className="connect-screen__headline">
+        Turn your calendar into availability
+      </h1>
+      <p className="connect-screen__subtext">
+        Connect Google Calendar to generate copy-pasteable availability tables
+        in seconds.
+      </p>
+      <div className="connect-screen__cta">
+        <GoogleSignInButton onClick={handleSignUp} />
+      </div>
+      <p className="connect-screen__footer muted">
+        We&apos;ll ask for read-only calendar access
+      </p>
     </div>
   );
 }

@@ -7,6 +7,7 @@
   "host_permissions": [
     "https://www.googleapis.com/*",
     "http://localhost:8000/*",
+    "http://localhost:5173/*",
     "https://*.supabase.co/*"
   ],
   "side_panel": {
