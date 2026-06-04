@@ -1,9 +1,28 @@
+import { useState } from "react";
+import { signInWithGoogle } from "../shared/auth";
 import { GoogleSignInButton } from "./GoogleSignInButton";
 import "./ConnectScreen.css";
 
-export function ConnectScreen() {
-  const handleSignUp = () => {
-    // UI-only stub; OAuth wiring comes later
+type Props = {
+  onSuccess: () => void;
+  message?: string;
+};
+
+export function ConnectScreen({ onSuccess, message }: Props) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSignIn = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await signInWithGoogle();
+      onSuccess();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Sign-in failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -13,15 +32,17 @@ export function ConnectScreen() {
         Turn your calendar into availability
       </h1>
       <p className="connect-screen__subtext">
-        Connect Google Calendar to generate copy-pasteable availability tables
-        in seconds.
+        Sign in with Google to get started.
       </p>
+      {message && <p className="connect-screen__message">{message}</p>}
+      {error && <p className="connect-screen__error">{error}</p>}
       <div className="connect-screen__cta">
-        <GoogleSignInButton onClick={handleSignUp} />
+        <GoogleSignInButton
+          onClick={handleSignIn}
+          loading={loading}
+          label="Sign in with Google"
+        />
       </div>
-      <p className="connect-screen__footer muted">
-        We&apos;ll ask for read-only calendar access
-      </p>
     </div>
   );
 }

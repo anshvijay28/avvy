@@ -21,12 +21,11 @@
     "default_title": "Open Avvy"
   },
   "oauth2": {
-    "client_id": "YOUR_CHROME_EXTENSION_OAUTH_CLIENT_ID",
+    "client_id": "398267804243-l5sokaa9i15t5bd04h4t2k3ffued56uv.apps.googleusercontent.com",
     "scopes": [
       "openid",
       "email",
-      "profile",
-      "https://www.googleapis.com/auth/calendar.readonly"
+      "profile"
     ]
   },
   "icons": {

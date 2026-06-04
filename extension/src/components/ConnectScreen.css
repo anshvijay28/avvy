@@ -44,3 +44,19 @@
   max-width: 260px;
   line-height: 1.4;
 }
+
+.connect-screen__message,
+.connect-screen__error {
+  font-size: 13px;
+  max-width: 280px;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.4;
+}
+
+.connect-screen__message {
+  color: var(--color-text-muted);
+}
+
+.connect-screen__error {
+  color: #c5221f;
+}

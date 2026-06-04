@@ -1,26 +1,58 @@
+import { useCallback, useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
 import { ConnectScreen } from "../components/ConnectScreen";
-import { AvailabilityTable } from "../components/AvailabilityTable";
-import { ChatInput } from "../components/ChatInput";
+import { HomeScreen } from "../components/HomeScreen";
+import { restoreSession, signOut } from "../shared/auth";
+import { supabase } from "../shared/supabase";
 
 export function SidePanel() {
-  // TODO: check chrome.storage.local for session on mount; route to main view when connected
-  const isConnected = false;
-  const hasTable = false;
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [signingOut, setSigningOut] = useState(false);
 
-  if (!isConnected) {
+  const refreshUser = useCallback(async () => {
+    const session = await restoreSession();
+    setUser(session?.user ?? null);
+  }, []);
+
+  useEffect(() => {
+    refreshUser().finally(() => setLoading(false));
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => listener.subscription.unsubscribe();
+  }, [refreshUser]);
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    try {
+      await signOut();
+      setUser(null);
+    } finally {
+      setSigningOut(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <main className="panel centered">
+        <p className="muted">Loading…</p>
+      </main>
+    );
+  }
+
+  if (!user) {
     return (
       <main className="panel">
-        <ConnectScreen />
+        <ConnectScreen onSuccess={refreshUser} />
       </main>
     );
   }
 
   return (
     <main className="panel">
-      <h1>Avvy</h1>
-      {/* TODO: date range picker + generate button */}
-      <AvailabilityTable slots={[]} />
-      <ChatInput disabled={!hasTable} />
+      <HomeScreen user={user} onSignOut={handleSignOut} signingOut={signingOut} />
     </main>
   );
 }
